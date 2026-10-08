@@ -1,0 +1,86 @@
+﻿l_english:
+ # Message filter (key = "message_filter_" + filter) and the battle toast.
+ message_filter_ck3xbl_battle:0 "Battles fought in the field"
+ msg_ck3xbl_battle_begins_title:0 "To Arms!"
+ msg_ck3xbl_battle_begins_desc:0 "The armies meet. Will you take the field?"
+
+ # Battle clock (docs/PROTOCOL.md 14): the second-clash toast and the news toasts (filter ck3xbl_battle_news, no pause).
+ message_filter_ck3xbl_battle_news:0 "Battles decided in the field"
+ msg_ck3xbl_reinforcements_title:0 "Reinforcements!"
+ msg_ck3xbl_reinforcements_desc:0 "Fresh troops reach the battle. Will you take the field again?"
+ msg_ck3xbl_battle_rages_title:0 "The Battle Rages On"
+ msg_ck3xbl_battle_rages_desc:0 "The battle is not over yet. Resume the game to see it decided."
+ msg_ck3xbl_battle_over_title:0 "The Battle Is Over"
+ msg_ck3xbl_battle_over_desc:0 "The fighting has ended and the hosts count their dead."
+
+ # 0001 - the call to arms
+ ck3xbl_battle.0001.t:0 "The Battle of [ck3xbl_prov.GetNameNoTooltip]"
+ ck3xbl_battle.0001.desc.attacking:0 "Our host has run down [ck3xbl_enemy_leader.GetTitledFirstName] near [ck3xbl_prov.GetNameNoTooltip]. The field is ours to take, if we have the stomach for it."
+ ck3xbl_battle.0001.desc.defending:0 "The banners of [ck3xbl_enemy_leader.GetTitledFirstName] crest the hills above [ck3xbl_prov.GetNameNoTooltip]. Our host must stand and fight."
+ # The troop numbers are saved scope values of this event's chain (one per battle, so two windows never mix them).
+ ck3xbl_battle.0001.desc.odds:0 "\n\n#V [ck3xbl_my_men|0]#! of our men stand against #V [ck3xbl_enemy_men|0]#!."
+ # A second clash (PROTOCOL 14.6): the joiner reinforces our host or the enemy's; "passed" once the battle went on without us.
+ ck3xbl_battle.0001.t.reinforcements:0 "Reinforcements Arrive!"
+ ck3xbl_battle.0001.desc.reinforcements_ours:0 "[ck3xbl_joiner_leader.GetTitledFirstName] arrives at [ck3xbl_prov.GetNameNoTooltip] with fresh troops for our host. The battle hangs in the balance again."
+ ck3xbl_battle.0001.desc.reinforcements_theirs:0 "[ck3xbl_joiner_leader.GetTitledFirstName] arrives at [ck3xbl_prov.GetNameNoTooltip] with fresh troops for the enemy host. The battle hangs in the balance again."
+ ck3xbl_battle.0001.desc.passed:0 "The moment has passed: the battle went on without you."
+ ck3xbl_moment_passed_tt:0 "The battle went on without you"
+ ck3xbl_battle.0001.a:0 "I will take the field myself!"
+ ck3xbl_battle.0001.c:0 "I will lead this host in person."
+ ck3xbl_battle.0001.b:0 "Let my commanders decide the day."
+ ck3xbl_field_busy_tt:0 "Another battle is already being fought in the field"
+ ck3xbl_with_host_tt:0 "You ride with this host"
+ ck3xbl_away_from_host_tt:0 "You are not with this host"
+
+ # 0002 - waiting for the battle; the status line is drawn by gui/event_window_widgets/ck3xbl_keypad.gui
+ ck3xbl_battle.0002.t:0 "The Armies Clash"
+ ck3xbl_battle.0002.desc:0 "Steel rings out across [ck3xbl_prov.GetNameNoTooltip]. Word of the outcome will reach us soon."
+ ck3xbl_battle.0002.desc.clock:0 "\n\nWhen the dust settles, resume the game: the battle will be decided within days."
+ ck3xbl_battle.0002.a:0 "The dust settles..."
+ ck3xbl_battle.0002.b:0 "Let the battle run its course without me."
+ ck3xbl_input_status:0 "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('ck3xbl_ready').GetValue, '(CFixedPoint)0' ), 'ck3xbl_input_status_ready', 'ck3xbl_input_status_wait' )]"
+ ck3xbl_input_status_wait:0 "#weak Awaiting word from the field...#!"
+ ck3xbl_input_status_ready:0 "#P The dispatch has arrived.#!"
+
+ # 0003 - the outcome (player variables set by ck3xbl_apply_summary_effect)
+ ck3xbl_battle.0003.t.win:0 "Victory at [ck3xbl_prov.GetNameNoTooltip]"
+ ck3xbl_battle.0003.t.loss:0 "Defeat at [ck3xbl_prov.GetNameNoTooltip]"
+ ck3xbl_battle.0003.t.undecided:0 "The Battle of [ck3xbl_prov.GetNameNoTooltip]"
+ ck3xbl_battle.0003.desc.numbers:0 "We lost #N [ROOT.Char.MakeScope.Var('ck3xbl_res_my_lost').GetValue|0]#! men, and the enemy left #P [ROOT.Char.MakeScope.Var('ck3xbl_res_enemy_lost').GetValue|0]#! of theirs on the field."
+ ck3xbl_battle.0003.desc.personal:0 "\n\nI cut down #V [ROOT.Char.MakeScope.Var('ck3xbl_res_my_kills').GetValue|0]#! foes with my own hand."
+ ck3xbl_battle.0003.desc.continues:0 "\n\nNeither host has broken: the armies remain locked in battle."
+ ck3xbl_battle.0003.desc.aftermath:0 "\n\nThe rout is not over: more of the vanquished may yet be taken or cut down."
+ ck3xbl_battle.0003.desc.cancelled:0 "No word came from the field. My commanders will see the battle through."
+ ck3xbl_battle.0003.a:0 "So it is written."
+
+ # Combat summary lines (battle_event). Attached to the victim's side: CHARACTER = the victim (left portrait),
+ # TARGET_CHARACTER = the killer or captor (right portrait). The engine appends _friendly / _enemy and the
+ # _player variants when the player is the character of that perspective.
+ ck3xbl_wounded_friendly:0 "[CHARACTER.GetUINameNoTooltip] was wounded in the thick of the fighting!"
+ ck3xbl_wounded_friendly_player:0 "You were wounded in the thick of the fighting!"
+ ck3xbl_wounded_enemy:0 "The enemy's [CHARACTER.GetUINameNoTooltip] was wounded in the thick of the fighting!"
+ ck3xbl_wounded_enemy_player:0 "The enemy's [CHARACTER.GetUINameNoTooltip] was wounded in the thick of the fighting!"
+ ck3xbl_wounded_by_friendly:0 "[CHARACTER.GetUINameNoTooltip] was wounded by [TARGET_CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_wounded_by_friendly_player:0 "You were wounded by [TARGET_CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_wounded_by_enemy:0 "[TARGET_CHARACTER.GetUINameNoTooltip] wounded [CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_wounded_by_enemy_player:0 "You wounded [CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_maimed_friendly:0 "[CHARACTER.GetUINameNoTooltip] was maimed in the thick of the fighting!"
+ ck3xbl_maimed_friendly_player:0 "You were maimed in the thick of the fighting!"
+ ck3xbl_maimed_enemy:0 "The enemy's [CHARACTER.GetUINameNoTooltip] was maimed in the thick of the fighting!"
+ ck3xbl_maimed_enemy_player:0 "The enemy's [CHARACTER.GetUINameNoTooltip] was maimed in the thick of the fighting!"
+ ck3xbl_maimed_by_friendly:0 "[CHARACTER.GetUINameNoTooltip] was maimed by [TARGET_CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_maimed_by_friendly_player:0 "You were maimed by [TARGET_CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_maimed_by_enemy:0 "[TARGET_CHARACTER.GetUINameNoTooltip] maimed [CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_maimed_by_enemy_player:0 "You maimed [CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_slain_friendly:0 "[CHARACTER.GetUINameNoTooltip] was slain in the thick of the fighting!"
+ ck3xbl_slain_friendly_player:0 "You were slain in the thick of the fighting!"
+ ck3xbl_slain_enemy:0 "The enemy's [CHARACTER.GetUINameNoTooltip] was slain in the thick of the fighting!"
+ ck3xbl_slain_enemy_player:0 "The enemy's [CHARACTER.GetUINameNoTooltip] was slain in the thick of the fighting!"
+ ck3xbl_slain_by_friendly:0 "[CHARACTER.GetUINameNoTooltip] was slain by [TARGET_CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_slain_by_friendly_player:0 "You were slain by [TARGET_CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_slain_by_enemy:0 "[TARGET_CHARACTER.GetUINameNoTooltip] cut down [CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_slain_by_enemy_player:0 "You cut down [CHARACTER.GetUINameNoTooltip] in the thick of the fighting!"
+ ck3xbl_captured_friendly:0 "[CHARACTER.GetUINameNoTooltip] was captured by [TARGET_CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_captured_friendly_player:0 "You were captured by [TARGET_CHARACTER.GetUINameNoTooltip]!"
+ ck3xbl_captured_enemy:0 "[TARGET_CHARACTER.GetUINameNoTooltip] captured [CHARACTER.GetUINameNoTooltip] after the battle!"
+ ck3xbl_captured_enemy_player:0 "You captured [CHARACTER.GetUINameNoTooltip] after the battle!"
