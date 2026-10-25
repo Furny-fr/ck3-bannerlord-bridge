@@ -25,6 +25,7 @@ internal static class CoreTests
     public static void Register(TestRegistry r)
     {
         r.Add("core.scope_print.formats", ScopePrintFormats);
+        r.Add("core.scope_print.localized_dash", ScopePrintLocalizedDash);
         r.Add("core.parser.records_and_dumps", ParserRecordsAndDumps);
         r.Add("core.parser.flush_and_orphans", ParserFlushAndOrphans);
         r.Add("core.snapshot.full_battle", SnapshotFullBattle);
@@ -156,6 +157,24 @@ internal static class CoreTests
         var combat = Expect.NotNull(ScopePrint.Parse(CombatPrint));
         Expect.Equal("Battle of Orangallu", combat.Name);
         Expect.Null(ScopePrint.Parse("709.00"));
+    }
+
+    /// <summary>A French CK3 (1.20) prints the "(Type – id)" separator as an en dash (lines as logged, \x15 wrappers included).</summary>
+    private static void ScopePrintLocalizedDash()
+    {
+        var reg = Expect.NotNull(ScopePrint.Parse(
+            "'TOOLTIP:MEN_AT_ARMS_TYPE,pikemen_unit L; Piquiers!!' (Internal ID: '15384' - Type: 'personal' ) \u0015weak (Regiment – 15384)\u0015!"));
+        Expect.Equal(("Regiment", 15384L, "pikemen_unit", "personal", "Piquiers"), (reg.Type, reg.Id, reg.MaaKey, reg.RegimentType, reg.Name));
+
+        var c = Expect.NotNull(ScopePrint.Parse("Vratislav Přemyslide of d_bohemia (Internal ID: 34287 - Historical ID 522) \u0015weak (Character – 34287)\u0015!"));
+        Expect.Equal(("Character", 34287L, "Vratislav Přemyslide", "d_bohemia", "522"), (c.Type, c.Id, c.Name, c.TitleKey, c.HistoricalId));
+
+        var army = Expect.NotNull(ScopePrint.Parse("1e armée de Praha \u0015weak (Army – 16777218)\u0015!"));
+        Expect.Equal(("Army", 16777218L, "1e armée de Praha"), (army.Type, army.Id, army.Name));
+
+        // Any dash punctuation (em dash here) and loose spacing.
+        var combat = Expect.NotNull(ScopePrint.Parse("Bataille de Kulmbach weak (Combat—150994946)!"));
+        Expect.Equal(("Combat", 150994946L, "Bataille de Kulmbach"), (combat.Type, combat.Id, combat.Name));
     }
 
     private static void ParserRecordsAndDumps()

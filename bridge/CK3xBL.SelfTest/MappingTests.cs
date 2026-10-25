@@ -322,7 +322,7 @@ internal static partial class MappingTests
             new CasualtyGroup { Id = side + ":levy", Soldiers = 6000, Agents = 767, Killed = JsCompat.RoundToInt(767 * down), Fled = JsCompat.RoundToInt(767 * fled), Toughness = 10 },
             new CasualtyGroup { Id = side + ":maa", Soldiers = 300, Agents = 38, Killed = JsCompat.RoundToInt(38 * down), Fled = JsCompat.RoundToInt(38 * fled), Toughness = 22, Pursuit = 10, Screen = 16 },
         };
-        string Fmt(CasualtyOutcome o) => $"{o.PursuitFraction}|" + string.Join(";", o.Winner.Concat(o.Loser).Select(g => $"{g.Id}:{g.Casualties}/{g.Fatal}/{g.Routed}"));
+        string Fmt(CasualtyOutcome o) => $"{o.PursuitFraction.ToString(System.Globalization.CultureInfo.InvariantCulture)}|" + string.Join(";", o.Winner.Concat(o.Loser).Select(g => $"{g.Id}:{g.Casualties}/{g.Fatal}/{g.Routed}"));
         var ck3 = new CasualtySettings();   // CK3 constants 0.3 / 0.05, as in the JS reference
         Expect.Equal("0.06|w:levy:1502/451/1051;w:maa:79/24/55;l:levy:2699/990/3086;l:maa:134/49/157",
             Fmt(CasualtyModel.Convert(m, Mk("w", 0.25, 0), Mk("l", 0.45, 0.2), ck3 with { Terrain = "forest", LoserIsDefender = true })));
