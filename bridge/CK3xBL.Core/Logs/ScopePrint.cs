@@ -7,6 +7,7 @@
 //   Sanda (Internal ID: 8199) weak (Province - 8199)!
 //   Sanda (Internal ID: 10110 - Internal Key: c_sanda) weak (Landed_title - 10110)!
 //   Battle of Sanda weak (Combat - 134217751)!
+// Localized games print the "(Type - id)" separator as an en dash: "Bataille de Kulmbach weak (Combat – 150994946)!".
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -30,7 +31,7 @@ public sealed class ScopePrint
     public bool IsNull => Id == NullId;
 
     private static readonly Regex TypeId = new(
-        @"\((?<type>[A-Za-z_]+) - (?<id>\d+)\)!?\s*$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        @"\((?<type>[A-Za-z_]+)\s*\p{Pd}\s*(?<id>\d+)\)!?\s*$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
     private static readonly Regex InternalKey = new(@"Internal Key: (?<key>[A-Za-z0-9_\-]*)\)", RegexOptions.Compiled);
     private static readonly Regex HistoricalIdRx = new(@"Historical ID (?<hid>[A-Za-z0-9_]+)", RegexOptions.Compiled);
     private static readonly Regex MaaRx = new(@"MEN_AT_ARMS_TYPE,(?<maa>[A-Za-z0-9_]+)", RegexOptions.Compiled);
