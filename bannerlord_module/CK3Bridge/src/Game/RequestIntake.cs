@@ -57,6 +57,8 @@ namespace CK3Bridge
                 Extras = extras,
                 // Without scale.battleSize the user's own battle size option stays in effect.
                 BattleSizeIndex = extras.BattleSize.HasValue ? RequestRules.BattleSizeIndex(extras.BattleSize.Value) : BannerlordConfig.BattleSize,
+                // Above the largest preset the exact troop count is written after the mission opens (RequestRules filters).
+                BattleSizeOverride = extras.BattleSize,
             };
             if (!CK3Missions.IsFieldScene(setup.Scene, out string forcedLevel, out string reason))
             {

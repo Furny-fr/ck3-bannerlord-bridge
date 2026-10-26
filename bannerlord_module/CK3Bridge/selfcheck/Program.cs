@@ -310,6 +310,13 @@ namespace CK3Bridge.SelfCheck
             Equal(6, RequestRules.BattleSizeIndex(5000), "above max");
             Equal(0, RequestRules.BattleSizeIndex(1), "below min");
             Equal(5, RequestRules.BattleSizeIndex(750), "750 agents");
+            Equal(false, RequestRules.FieldBattleSizeOverride(null, 25260).HasValue, "no battleSize: no override");
+            Equal(false, RequestRules.FieldBattleSizeOverride(0, 25260).HasValue, "battleSize 0: no override");
+            Equal(false, RequestRules.FieldBattleSizeOverride(1000, 25260).HasValue, "largest preset: preset path");
+            Equal(5000, RequestRules.FieldBattleSizeOverride(5000, 25260) ?? -1, "5000 under a 25260-agent cap");
+            Equal(1024, RequestRules.FieldBattleSizeOverride(5000, 2048) ?? -1, "5000 under a 2048-agent cap");
+            Equal(12630, RequestRules.FieldBattleSizeOverride(30000, 25260) ?? -1, "30000 capped at 25260 / 2");
+            Equal(1001, RequestRules.FieldBattleSizeOverride(1001, 25260) ?? -1, "just above the largest preset");
             Equal(false, RequestRules.IsPlayerAttacker("Defender"), "defender side");
             Equal(true, RequestRules.IsPlayerAttacker(null), "default side");
             Equal(0.0, RequestRules.ColorDistance(0xFF123456, 0xFF123456), "same colour");

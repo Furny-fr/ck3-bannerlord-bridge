@@ -30,6 +30,7 @@ public sealed class BridgeConfig
         MaxAgentsTotal = Battle.MaxAgentsTotal,
         MinAgentsPerSide = Battle.MinAgentsPerSide,
         BattleSize = Battle.BattleSize,
+        UncapFieldBattleSize = Battle.UncapFieldBattleSize,
         PlayerDeathIsReal = Battle.PlayerDeathIsReal,
         KilledToCk3DeadShareWinner = Battle.KilledToCk3DeadShareWinner,
         KilledToCk3DeadShareLoser = Battle.KilledToCk3DeadShareLoser,
@@ -83,6 +84,8 @@ public sealed class BattleSettings
     public int MaxAgentsTotal = 1000;
     public int MinAgentsPerSide = 40;
     public int BattleSize = 500;
+    /// <summary>Send battleSize above 1000 as is (exact troop count; needs a mod lifting the engine cap, e.g. Limitless); false caps it at 1000.</summary>
+    public bool UncapFieldBattleSize;
     public bool PlayerDeathIsReal;
     public double KilledToCk3DeadShareWinner = 0.45;
     public double KilledToCk3DeadShareLoser = 0.65;

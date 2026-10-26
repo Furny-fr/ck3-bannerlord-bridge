@@ -429,7 +429,10 @@ Clearly-marked extensions of §3 by the module. All are optional for the bridge;
    season `autumn` -> `fall`, unknown/null -> `summer`; `timeOfDay` snaps to the nearest stock preset hour 6/12/15/18/22;
    an unknown scene, or a siege / lords-hall scene of the custom battle list, -> `battle_terrain_029`; `scale.battleSize`
    (agents) -> the nearest `BannerlordConfig.BattleSize` option (200/300/400/500/600/800/1000), applied only while the
-   mission is created (absent -> the user's own option); unknown culture -> `vlandia`; unknown troop ids, items, skills,
+   mission is created (absent -> the user's own option); `scale.battleSize` > 1000 = the exact number of simultaneous
+   troops, written over `DefaultBattleMissionAgentSpawnLogic._battleSize` once the mission is opened and capped at the
+   engine capacity / 2 (rider + horse); it needs `battle.uncapFieldBattleSize = true` on the bridge (otherwise the bridge
+   sends at most 1000) AND a mod that lifts the engine agent limit (e.g. Limitless); unknown culture -> `vlandia`; unknown troop ids, items, skills,
    rosters and slots, and items that do not fit their slot, are skipped with a log line; an `equipment.overrides` value
    `""` empties that slot (§6.2); an invalid `banner.code` -> the culture banner. `protocol` other than 2 -> `error` (a
    missing `protocol` = 2). Note: §6.2's `kind: "siege"` relief battles are fought as field battles under the §0 decision;

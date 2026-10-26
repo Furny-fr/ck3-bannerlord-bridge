@@ -244,7 +244,8 @@ is never overwritten, and the defaults are used until you fix it.
 |---|---|---|
 | `maxAgentsTotal` | `1000` | Most Bannerlord soldiers across both sides (heroes not counted). Bigger CK3 armies are scaled down. |
 | `minAgentsPerSide` | `40` | Fewest soldiers a side gets, so a small force is not reduced to a handful. |
-| `battleSize` | `500` | Most soldiers on the field at once; the rest arrive as reinforcements. Rounded to Bannerlord's nearest option (200 to 1000). |
+| `battleSize` | `500` | Most soldiers on the field at once; the rest arrive as reinforcements. Rounded to Bannerlord's nearest option (200 to 1000). Above 1000: the exact number of soldiers on the field at once, capped at the engine capacity / 2; needs `uncapFieldBattleSize` = `true` AND a mod that lifts Bannerlord's agent limit (such as Limitless). |
+| `uncapFieldBattleSize` | `false` | `true`: a `battleSize` above 1000 is sent as is instead of being capped at 1000. |
 | `playerDeathIsReal` | `false` | `true`: your character can really die or be captured when you fall in Bannerlord. |
 | `killedToCk3DeadShareWinner` | `0.45` | Share of the winning side's Bannerlord casualties that are dead in CK3. |
 | `killedToCk3DeadShareLoser` | `0.65` | The same for the losing side. |

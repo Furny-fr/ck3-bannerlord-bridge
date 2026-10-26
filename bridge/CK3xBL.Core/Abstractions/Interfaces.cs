@@ -58,6 +58,7 @@ public sealed class MapperOptions
     public int MaxAgentsTotal = 1000;                 // Bannerlord agents across both sides (excluding heroes)
     public int MinAgentsPerSide = 40;
     public int BattleSize = 500;                      // simultaneous agents on the field
+    public bool UncapFieldBattleSize;                 // false: scale.battleSize capped at 1000 (largest BL preset)
     public bool PlayerDeathIsReal;                    // hardcore: Bannerlord death of the player avatar can kill the CK3 ruler
     public double KilledToCk3DeadShareWinner = 0.45;  // share of BL "killed" that become CK3 losses for the winner side
     public double KilledToCk3DeadShareLoser = 0.65;

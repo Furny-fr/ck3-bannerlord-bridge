@@ -26,6 +26,7 @@ namespace CK3Bridge
         public int PresetHour;
         public string SceneLevels;
         public int BattleSizeIndex;
+        public int? BattleSizeOverride;                  // scale.battleSize; applied only above the largest preset (RequestRules)
         public RequestExtras Extras;
     }
 
@@ -55,7 +56,32 @@ namespace CK3Bridge
         public static Mission Open(MissionSetup setup, BattleArmies armies)
         {
             Game.Current.PlayerTroop = armies.PlayerCharacter;   // the agent built for this character gets the Player controller
-            return RuntimeSettings.WithBattleSize(setup.BattleSizeIndex, () => OpenField(setup, armies));
+            Mission mission = RuntimeSettings.WithBattleSize(setup.BattleSizeIndex, () => OpenField(setup, armies));
+            if (setup.BattleSizeOverride.HasValue) ApplyBattleSizeOverride(mission, setup.BattleSizeOverride.Value);
+            return mission;
+        }
+
+        /// <summary>
+        /// Writes a field battle size above the largest preset over DefaultBattleMissionAgentSpawnLogic._battleSize (readonly,
+        /// set in its constructor). Safe right after MissionState.OpenNew: the field is first read in InitWithSinglePhase,
+        /// from CustomBattleMissionSpawnHandler.AfterStart, frames later (Bannerlord v1.4.8).
+        /// </summary>
+        private static void ApplyBattleSizeOverride(Mission mission, int requested)
+        {
+            var logic = mission?.GetMissionBehavior<DefaultBattleMissionAgentSpawnLogic>();
+            FieldInfo field = typeof(DefaultBattleMissionAgentSpawnLogic).GetField("_battleSize", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (logic == null || field == null || field.FieldType != typeof(int))
+            {
+                BridgeIo.Log($"field battle size override skipped: {(logic == null ? "no DefaultBattleMissionAgentSpawnLogic" : "DefaultBattleMissionAgentSpawnLogic._battleSize not found")}");
+                return;
+            }
+            int cap = DefaultBattleMissionAgentSpawnLogic.MaxNumberOfAgentsForMission;
+            int? value = RequestRules.FieldBattleSizeOverride(requested, cap);
+            if (!value.HasValue) return;
+            field.SetValue(logic, value.Value);
+            BridgeIo.Log($"field battle size override: requested {requested}, applied {value.Value} troops (engine cap {cap} agents)");
+            if (value.Value < requested)
+                BridgeIo.Log($"warning: engine cap {cap} agents: no battle-size uncap mod active?");
         }
 
         private static Mission OpenField(MissionSetup setup, BattleArmies armies)
