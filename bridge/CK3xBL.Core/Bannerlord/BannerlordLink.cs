@@ -10,7 +10,8 @@
 //  * Module check: no launch while <Bannerlord>/Modules/CK3Bridge is missing (Problem says so; tried again on the next start).
 //    When neither module list boots, BootFailed tells the player once and nothing is relaunched until the next start.
 //  * Safe-mode question after an unclean exit: answered No automatically while booting, only in bridge processes.
-//  * Health: process exit => Lost(Exited); heartbeat older than HeartbeatTimeout (longer while booting/loading) => Lost(Unresponsive),
+//  * Health: process exit => Lost(Exited); heartbeat older than HeartbeatTimeout (longer while booting/loading/held: the initial
+//    spawn of a large battle runs after 'go' while the module is still held) => Lost(Unresponsive),
 //    and StatusChanged is raised again when the heartbeat recovers. Bannerlord is killed only when its window has been hung for
 //    longer than HungKill; otherwise the bridge waits or closes it gracefully.
 //  * Files: request.json / command.txt are written atomically. The module takes command.txt whole (read, then delete), so a command
@@ -477,8 +478,8 @@ public sealed class BannerlordLink : IBannerlordLink, IDisposable
 
     private static DateTime HeartbeatTime(BannerlordStatus s) => DateTimeOffset.FromUnixTimeMilliseconds(s.T).UtcDateTime;
 
-    private TimeSpan HeartbeatLimit(BannerlordStatus s) =>
-        s.Status is BannerlordStates.Booting or BannerlordStates.Loading ? _o.LoadingHeartbeatTimeout : _o.HeartbeatTimeout;
+    internal TimeSpan HeartbeatLimit(BannerlordStatus s) =>
+        s.Status is BannerlordStates.Booting or BannerlordStates.Loading or BannerlordStates.Held ? _o.LoadingHeartbeatTimeout : _o.HeartbeatTimeout;
 
     private void CheckHealth(Process p, DateTime now)
     {

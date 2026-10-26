@@ -133,7 +133,7 @@ public sealed class BattleMapper : IBattleMapper
             PlayerSide = heroes.PlayerSide == SideKey.Attacker ? "attacker" : "defender",
             PlayerIsGeneral = heroes.PlayerIsGeneral,
             Presentation = PresentationWriter.Build(battle, field, heroes, PresentationWriter.SideName(playerPlan.Snapshot), options),
-            Scale = new ScaleInfo { MenPerAgent = (float)JsCompat.R2(soldiers / (double)Math.Max(1, groupAgents)), BattleSize = options.BattleSize },
+            Scale = new ScaleInfo { MenPerAgent = (float)JsCompat.R2(soldiers / (double)Math.Max(1, groupAgents)), BattleSize = options.UncapFieldBattleSize ? options.BattleSize : Math.Min(options.BattleSize, 1000) },
             Attacker = SideRequestFor(tables, troops, attacker, heroes, knights),
             Defender = SideRequestFor(tables, troops, defender, heroes, knights),
         };

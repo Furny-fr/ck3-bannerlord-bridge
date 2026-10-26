@@ -58,6 +58,8 @@ internal static partial class MappingTests
         r.Add("mapping.request.siege_details", SiegeDetails);
         r.Add("mapping.request.raid_sergeant_and_stock_general", RaidDetails);
         r.Add("mapping.request.huge_battle_scaling", HugeDetails);
+        r.Add("mapping.request.battle_size_capped_at_1000_unless_uncapped", BattleSizeCappedUnlessUncapped);
+        r.Add("mapping.request.battle_size_uncapped_is_sent_as_is", BattleSizeUncapped);
         r.Add("mapping.request.stand_in_avatar_when_player_absent", StandInAvatar);
         r.Add("mapping.request.vassal_battle_without_player", VassalBattle);
         r.Add("mapping.outcome.abort_cancel_and_player_protection", AbortCancelAndProtection);
@@ -852,6 +854,18 @@ internal static partial class MappingTests
         Expect.True(plan.Attacker.Groups.Where(g => g.Key.ArmyTag == 53).All(g => g.BlCulture == "vlandia"));
         Expect.True(req.Attacker.Heroes.Single(h => h.IsPlayer).Equipment.Roster.EndsWith("_emp_king_template_bat_m", StringComparison.Ordinal));
         Expect.True(req.Scale.MenPerAgent > 30);
+    }
+
+    private static void BattleSizeCappedUnlessUncapped()
+    {
+        var req = Mapper.BuildRequest(Scenarios.Huge(), new MapperOptions { BattleSize = 5000 });
+        Expect.Equal(1000, req.Scale.BattleSize, "uncapFieldBattleSize off: the largest Bannerlord preset");
+    }
+
+    private static void BattleSizeUncapped()
+    {
+        var req = Mapper.BuildRequest(Scenarios.Huge(), new MapperOptions { BattleSize = 5000, UncapFieldBattleSize = true });
+        Expect.Equal(5000, req.Scale.BattleSize, "uncapFieldBattleSize on: exact troop count for the module");
     }
 
     private static void StandInAvatar()

@@ -74,6 +74,18 @@ namespace CK3Bridge
             return best;
         }
 
+        /// <summary>
+        /// Field battle size to write over DefaultBattleMissionAgentSpawnLogic._battleSize once the mission is opened, or
+        /// null to keep the preset path (<see cref="BattleSizeIndex"/>) for requests up to the largest preset (1000).
+        /// The value is a troop count: capped at <paramref name="maxAgentsForMission"/> / 2 (rider + horse), the same
+        /// cap as the DefaultBattleMissionAgentSpawnLogic constructor (MaxNumberOfTroopsForMission).
+        /// </summary>
+        public static int? FieldBattleSizeOverride(int? requested, int maxAgentsForMission)
+        {
+            if (!requested.HasValue || requested.Value <= FieldBattleSizes[FieldBattleSizes.Length - 1]) return null;
+            return Math.Min(requested.Value, Math.Max(1, maxAgentsForMission / 2));
+        }
+
         /// <summary>Clamps a probability to 0..1; NaN falls back to <paramref name="fallback"/>.</summary>
         public static float Probability(float value, float fallback)
         {

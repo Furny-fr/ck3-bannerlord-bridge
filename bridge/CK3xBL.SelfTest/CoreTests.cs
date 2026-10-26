@@ -60,6 +60,7 @@ internal static class CoreTests
         r.Add("core.tailer.at_end_after_a_sliced_backlog", TailerAtEnd);
         r.Add("core.snapshot.player_absent_key", SnapshotPlayerAbsent);
         r.Add("core.bannerlord.stale_result_of_another_run_is_ignored", BannerlordStaleResultIgnored);
+        r.Add("core.bannerlord.held_gets_the_loading_heartbeat_limit", BannerlordHeldHeartbeatLimit);
         r.Add("core.orchestrator.happy_path", OrchestratorHappyPath);
         r.Add("core.orchestrator.idle_after_result_returns", OrchestratorIdleAfterResult);
         r.Add("core.orchestrator.final_result_without_status", OrchestratorFinalResultWithoutStatus);
@@ -1268,6 +1269,16 @@ internal static class CoreTests
         Expect.SequenceEqual(new[] { "b1_t" }, seen, "a battle of this run is reported");
         Expect.True(journal.Lines.Any(l => l.Contains("result.json: b1_t result", StringComparison.Ordinal)));
         Expect.True(link.IsRequestedThisRun("b1_t") && !link.IsRequestedThisRun("t1_knights"));
+    }
+
+    // The initial spawn of a large battle blocks the module for seconds after 'go' while it is still held: held gets the loading limit.
+    private static void BannerlordHeldHeartbeatLimit()
+    {
+        using var dir = new TempDir();
+        using var link = new BannerlordLink(new BannerlordLinkOptions { SharedDir = dir.Path, GameDir = dir.File("nope") }, new MemoryJournal());
+        var age = TimeSpan.FromSeconds(10);
+        Expect.True(age <= link.HeartbeatLimit(new BannerlordStatus { Status = BannerlordStates.Held }), "held + 10 s: not lost");
+        Expect.True(age > link.HeartbeatLimit(new BannerlordStatus { Status = BannerlordStates.Fighting }), "fighting + 10 s: lost");
     }
 
     // ===================================================================================================== orchestrator
