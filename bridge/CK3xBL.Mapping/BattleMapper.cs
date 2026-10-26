@@ -175,7 +175,9 @@ public sealed class BattleMapper : IBattleMapper
             Heroes = heroes.Heroes.Where(h => h.Side == side.Key).Select(h => h.Spec).ToList(),
             Troops = troopRequests,
             Buffs = knights?.SideBuffsFor(side.Key),
-            GroupBuffs = knights?.GroupBuffsFor(side.Key, troopRequests.Select(t => t.Group!)) ?? new Dictionary<string, GroupBuffs>(),
+            GroupBuffs = StatNormalizer.Apply(
+                knights?.GroupBuffsFor(side.Key, troopRequests.Select(t => t.Group!)) ?? new Dictionary<string, GroupBuffs>(),
+                troopRequests.Select(t => t.Group!), tables.Normalization, tables.Ck3),
         };
     }
 }

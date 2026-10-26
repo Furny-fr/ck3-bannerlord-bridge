@@ -1,0 +1,15 @@
+{
+ "meta": {
+  "purpose": "Opt-in stat normalization (StatNormalizer): each men-at-arms group's Bannerlord damage and health follow its CK3 base stats (ck3_catalog.json maa_types[].damage/toughness). Levies and knight retinues are left alone.",
+  "formula": "damage factor = clamp(damage_scale * damage / baseline_damage), health factor = clamp(toughness_scale * toughness / baseline_toughness), both clamped to [clamp_min, clamp_max]; they multiply the group's existing groupBuffs (knights pass) and the product is clamped again. A stat of 0 (siege weapons) keeps a neutral factor.",
+  "baseline": "30 / 20 are the medians of the 111 MaA types of ck3_catalog.json (CK3 1.20): a typical regiment stays at 1.0. Means (46 / 23) are pulled up by heavy cavalry and elephants; the levy (10 / 10) would push almost every MaA to clamp_max.",
+  "off": "normalization_mode \"off\" (default), a missing file or invalid values: the request is built exactly as without this file."
+ },
+ "normalization_mode": "off",
+ "damage_scale": 1.0,
+ "toughness_scale": 1.0,
+ "clamp_min": 0.5,
+ "clamp_max": 2.0,
+ "baseline_damage": 30,
+ "baseline_toughness": 20
+}

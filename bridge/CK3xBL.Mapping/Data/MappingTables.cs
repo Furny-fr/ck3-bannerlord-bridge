@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Text.Json;
 using CK3xBL.Core.Config;
+using CK3xBL.Mapping.Buffs;
 
 namespace CK3xBL.Mapping.Data;
 
@@ -45,6 +46,8 @@ public sealed class MappingTables
     /// <summary>mapping.json restricted_troops. Load refuses data that resolves a restricted troop outside
     /// its allow entries, so the resolver needs no runtime filter.</summary>
     public required TroopRestrictions Restrictions { get; init; }
+    /// <summary>normalization.json (StatNormalizer); off when the file is missing.</summary>
+    public NormalizationSettings Normalization { get; init; } = NormalizationSettings.Off;
 
     /// <summary>
     /// Returns the tables for <paramref name="configuredDirectory"/> (or the discovered bridge/data), loading them once. A failed
@@ -100,6 +103,7 @@ public sealed class MappingTables
             Items = blCatalog.Items.All.GroupBy(i => i.Id, StringComparer.Ordinal).ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal),
             Knights = KnightsTables.Load(directory, Json),
             Restrictions = restrictions,
+            Normalization = NormalizationSettings.Load(directory),
         };
     }
 
