@@ -234,7 +234,7 @@ is never overwritten, and the defaults are used until you fix it.
 | `preloadOnStart` | `true` | Start Bannerlord hidden when the bridge starts, so the first battle loads quickly. |
 | `keepRunning` | `true` | Start Bannerlord again in the background after it exits or crashes. |
 | `heartbeatTimeoutSeconds` | `5` | Bannerlord counts as unresponsive when its module has not reported for this long. |
-| `loadingHeartbeatTimeoutSeconds` | `60` | The same while Bannerlord boots or loads a battle. |
+| `loadingHeartbeatTimeoutSeconds` | `60` | The same while Bannerlord boots or loads a battle, and while the battle is held (the initial spawn). |
 | `bootTimeoutSeconds` | `180` | Longest wait for Bannerlord to start. |
 | `hungKillSeconds` | `30` | Bannerlord is ended by force only when its window has not responded for this long. Never otherwise. |
 
