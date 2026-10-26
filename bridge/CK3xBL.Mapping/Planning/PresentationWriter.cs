@@ -31,12 +31,16 @@ public static class PresentationWriter
         return n.Length > 0 ? n : PlaceName(battle);
     }
 
-    /// <summary>The CK3 combat name with an article: "Battle of Orangallu" -> "The Battle of Orangallu".</summary>
+    /// <summary>
+    /// The CK3 combat name, with an article when it is English: "Battle of Orangallu" -> "The Battle of Orangallu". A combat
+    /// name in another game language is kept as CK3 wrote it ("Bataille de Višegrad").
+    /// </summary>
     public static string Title(BattleSnapshot battle)
     {
         string combat = Text.SanitizeName(battle.CombatName);
         if (combat.Length == 0) return $"The Battle of {PlaceName(battle)}";
-        return combat.StartsWith("The ", StringComparison.OrdinalIgnoreCase) ? combat : "The " + combat;
+        if (combat.StartsWith("The ", StringComparison.OrdinalIgnoreCase)) return combat;
+        return combat.StartsWith("Battle ", StringComparison.Ordinal) ? "The " + combat : combat;
     }
 
     public static string Detail(BattleSnapshot battle, BattlefieldChoice field)
