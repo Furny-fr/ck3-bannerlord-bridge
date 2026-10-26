@@ -81,6 +81,7 @@ internal static partial class MappingTests
         r.Add("mapping.continuation.knights", ContinuationKnights);
         RegisterKnights(r);
         RegisterLiveFixes(r);
+        RegisterNormalization(r);
     }
 
     // ---- data --------------------------------------------------------------------------------------------------------

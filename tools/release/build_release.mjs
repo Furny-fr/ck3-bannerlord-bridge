@@ -57,7 +57,7 @@ const RUNTIME_DATA = [
   'bl_banner_colors.json', 'bl_catalog.json', 'bl_ruler_kits.json', 'bl_scenes.json', 'bl_skins_human.json',
   'ck3_accolade_types.json', 'ck3_artifact_to_bl_items.json', 'ck3_catalog.json', 'ck3_combat_traits.json',
   'ck3_emblem_to_bl_icon.json', 'ck3_gene_to_bl_face.json', 'ck3_maa_index.json', 'ck3_named_colors_to_bl.json',
-  'ck3_province_climate.json', 'ck3_province_terrain_index.json', 'mapping.json', 'terrain_scenes.json',
+  'ck3_province_climate.json', 'ck3_province_terrain_index.json', 'mapping.json', 'normalization.json', 'terrain_scenes.json',
 ];
 
 class StepError extends Error {}

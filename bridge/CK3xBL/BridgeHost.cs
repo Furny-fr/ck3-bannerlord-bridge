@@ -9,6 +9,7 @@ using CK3xBL.Core.Diagnostics;
 using CK3xBL.Core.Logs;
 using CK3xBL.Core.Orchestration;
 using CK3xBL.Mapping;
+using CK3xBL.Mapping.Buffs;
 using CK3xBL.Ux;
 
 namespace CK3xBL;
@@ -50,6 +51,7 @@ internal sealed class BridgeHost : IAsyncDisposable
         _pause = new PauseStateReader(Path.Combine(ck3Logs, "dedicated_server.log"), Ck3Locator.IsRunning);
 
         var maaIndex = LoadMaaIndex(Path.Combine(paths.DataDir, "ck3_maa_index.json"));
+        LogNormalization(paths.DataDir);
         var d = config.Delivery;
         var keypad = new KeypadDelivery(_ck3, injector, _inputGuards, _monitor, maaIndex, new KeypadOptions
         {
@@ -235,6 +237,19 @@ internal sealed class BridgeHost : IAsyncDisposable
         _bannerlord.Dispose();
         _inputGuards.Dispose();
         UxLog.Sink = null;
+    }
+
+    /// <summary>The stat normalization the mapper will use (bridge/data/normalization.json, read again when the tables load).</summary>
+    private void LogNormalization(string dataDir)
+    {
+        try
+        {
+            _journal.Info("app", $"stat normalization: {NormalizationSettings.Load(dataDir).Describe()}");
+        }
+        catch (Exception e)
+        {
+            _journal.Error("app", $"cannot read {Path.Combine(dataDir, "normalization.json")}; battles will fail to map until it is fixed", e);
+        }
     }
 
     private MaaIndexTable? LoadMaaIndex(string path)
